@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Practice / Challenge</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<h1>Quiz</h1>
+
+<form id="quizForm"></form>
+<button id="submitBtn">Submit</button>
+
+<!-- Pass questions as JSON from Flask -->
+<script>
+    const questions = {{ questions | tojson }};
+    const challenge_code = "{{ challenge_code if challenge_code else '' }}";
+</script>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

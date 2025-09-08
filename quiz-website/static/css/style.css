@@ -1,0 +1,6 @@
+body{font-family:Arial;text-align:center;margin:20px;}
+.btn{padding:10px 20px;margin:10px;background:#3498db;color:white;text-decoration:none;border-radius:5px;}
+.btn:hover{background:#2980b9;}
+.question-block{margin:20px;}
+table{margin:auto;border-collapse:collapse;}
+th,td{padding:10px;border:1px solid black;}

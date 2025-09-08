@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Join Challenge</title>
+<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+</head>
+<body>
+<h1>Join Challenge</h1>
+{% if code %}Challenge Code: {{ code }}<br>{% endif %}
+<form method="POST">
+Challenge Code: <input type="text" name="challenge_code" required><br>
+<button type="submit">Join</button>
+</form>
+</body>
+</html>

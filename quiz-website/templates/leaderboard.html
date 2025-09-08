@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Leaderboard</title>
+<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+</head>
+<body>
+<h1>Leaderboard</h1>
+<table border="1">
+<tr><th>Username</th><th>Total Score</th></tr>
+{% for u in users %}
+<tr><td>{{ u.username }}</td><td>{{ u.total_score }}</td></tr>
+{% endfor %}
+</table>
+</body>
+</html>
