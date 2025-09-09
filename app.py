@@ -46,7 +46,7 @@ def practice():
     return render_template('practice.html', questions=questions)
 
 @app.route('/createChallenge', methods=['GET', 'POST'])
-def create_challenge():
+def createChallenge():
     if request.method == 'POST':
         challenge_name = request.form['challenge_name']
         num_questions = int(request.form['num_questions'])
@@ -69,7 +69,7 @@ def create_challenge():
     return render_template('createChallenge.html')
 
 @app.route('/joinChallenge')
-def join_challenge():
+def joinChallenge():
     return render_template('joinChallenge.html')
 
 @app.route('/leaderboard')
@@ -85,7 +85,7 @@ def leaderboard():
 # ------------------- ADMIN -------------------
 
 @app.route('/admin', methods=['GET', 'POST'])
-def admin_login():
+def admin():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
