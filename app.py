@@ -105,6 +105,19 @@ def admin():
             flash('Invalid credentials', 'danger')
     
     return render_template('admin.html')
+    
+@app.route("/submit_score", methods=["POST"])
+def submit_score():
+    data = request.get_json()
+    username = data.get("username")
+    score = data.get("score")
+
+    cur = conn.cursor()
+    cur.execute("INSERT INTO leaderboard (username, score) VALUES (%s, %s)", (username, score))
+    conn.commit()
+    cur.close()
+
+    return jsonify({"message": "Score saved!"}), 200
 
 @app.route("/upload_pdf", methods=["POST"])
 def upload_pdf():
