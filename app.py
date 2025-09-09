@@ -106,40 +106,37 @@ def admin():
     
     return render_template('admin.html')
 
-@app.route('/upload_pdf', methods=['GET', 'POST'])
+@app.route("/upload_pdf", methods=["POST"])
 def upload_pdf():
-    if request.method == 'POST':
-        file = request.files['pdf_file']
-        difficulty = request.form['difficulty']
-        
-        if file and file.filename.endswith('.pdf'):
-            filename = secure_filename(file.filename)
-            save_path = os.path.join(UPLOAD_FOLDER, filename)
-            file.save(save_path)
-            
-            # Convert PDF pages to images
-            doc = fitz.open(save_path)
-            for i, page in enumerate(doc):
-                pix = page.get_pixmap()
-                img_path = os.path.join(EASY_FOLDER if difficulty=='easy' else HARD_FOLDER, f"{filename}_{i+1}.png")
-                pix.save(img_path)
-                
-                # Insert into DB
-                conn = get_conn()
-                cur = conn.cursor()
-                cur.execute(
-                    "INSERT INTO questions (question_text, difficulty, image_path) VALUES (%s, %s, %s)",
-                    (f"Question from {filename} page {i+1}", difficulty, img_path)
-                )
-                conn.commit()
-                cur.close()
-                conn.close()
-            
-            flash(f'{filename} uploaded and processed!', 'success')
-        else:
-            flash('Invalid file type', 'danger')
-    
-    return render_template('upload_pdf.html')
+    try:
+        file = request.files["file"]
+        if not file:
+            return jsonify({"error": "No file uploaded"}), 400
+
+        # Read file into memory
+        pdf_bytes = file.read()
+
+        import fitz  # PyMuPDF
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+
+        text = ""
+        for page in doc:
+            text += page.get_text()
+
+        # Store in DB
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute("INSERT INTO uploads (content) VALUES (%s)", (text,))
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({"message": "PDF uploaded and processed successfully!"})
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()  # prints full error in Render logs
+        return jsonify({"error": str(e)}), 500
 
 # ------------------- RUN -------------------
 
