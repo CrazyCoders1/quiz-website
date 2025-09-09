@@ -21,6 +21,10 @@ def get_conn():
 def index():
     return render_template("index.html")
 
+@app.route("/practice")
+def practice():
+    return render_template("practice.html")
+
 # Example: fetch questions for practice (easy/tough/mixed)
 @app.route("/get_quiz", methods=["POST"])
 def get_quiz():
