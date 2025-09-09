@@ -45,7 +45,7 @@ def practice():
     conn.close()
     return render_template('practice.html', questions=questions)
 
-@app.route('/create_challenge', methods=['GET', 'POST'])
+@app.route('/createChallenge', methods=['GET', 'POST'])
 def create_challenge():
     if request.method == 'POST':
         challenge_name = request.form['challenge_name']
@@ -64,11 +64,11 @@ def create_challenge():
         cur.close()
         conn.close()
 
-        return redirect(f'/join_challenge/{challenge_id}')  # redirect after create
+        return redirect(f'/joinChallenge/{challenge_id}')  # redirect after create
 
-    return render_template('create_challenge.html')
+    return render_template('createChallenge.html')
 
-@app.route('/join_challenge')
+@app.route('/joinChallenge')
 def join_challenge():
     return render_template('joinChallenge.html')
 
@@ -85,19 +85,19 @@ def leaderboard():
 # ------------------- ADMIN -------------------
 
 @app.route('/admin', methods=['GET', 'POST'])
-def admin():
+def admin_login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
-        if ADMINS.get(username) == password:
-            flash('Logged in as admin', 'success')
-            return redirect(url_for('upload_pdf'))
+
+        # simple check - you can improve later
+        if username == os.getenv("ADMIN_USER") and password == os.getenv("ADMIN_PASS"):
+            return redirect('/upload_pdf')
         else:
-            flash('Invalid credentials', 'danger')
-    
+            return "Invalid credentials", 401
+
     return render_template('admin.html')
-    
+
 @app.route("/submit_score", methods=["POST"])
 def submit_score():
     data = request.get_json()
