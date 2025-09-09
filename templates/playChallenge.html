@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Play Challenge</title>
+</head>
+<body>
+<h2>Challenge: {{ challenge[0] }}</h2>
+<p>Duration: {{ challenge[1] }}</p>
+<p>Difficulty: {{ challenge[2] }}</p>
+<h3>Questions:</h3>
+<ul>
+{% for q in challenge[3] %}
+  <li><img src="{{ url_for('static', filename='questions/' + q) }}" width="200"></li>
+{% endfor %}
+</ul>
+</body>
+</html>

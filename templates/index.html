@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Quiz Home</title>
-<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <title>Quiz Website</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 <h1>Welcome to Quiz Website</h1>
-<div class="buttons">
-<a href="{{ url_for('practice') }}" class="btn">Practice Mode</a>
-<a href="{{ url_for('create_challenge') }}" class="btn">Challenge Mode</a>
-<a href="{{ url_for('leaderboard') }}" class="btn">Leaderboard</a>
-</div>
+<a href="{{ url_for('practice') }}">Practice Mode</a><br>
+<a href="{{ url_for('create_challenge') }}">Create Challenge</a><br>
+<a href="{{ url_for('join_challenge') }}">Join Challenge</a><br>
+<a href="{{ url_for('leaderboard') }}">Leaderboard</a><br>
+<a href="{{ url_for('admin') }}">Admin Login</a>
 </body>
 </html>
