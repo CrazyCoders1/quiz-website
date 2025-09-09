@@ -104,7 +104,7 @@ def submit_score():
     data = request.get_json()
     username = data.get("username")
     score = data.get("score")
-
+    conn = get_conn()
     cur = conn.cursor()
     cur.execute("INSERT INTO leaderboard (username, score) VALUES (%s, %s)", (username, score))
     conn.commit()
