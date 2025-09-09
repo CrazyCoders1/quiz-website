@@ -4,18 +4,17 @@
 <title>Create Challenge</title>
 </head>
 <body>
-<h2>Create Challenge</h2>
-<form method="post">
-  Name: <input type="text" name="challenge_name"><br>
-  Duration (minutes/timeless): <input type="text" name="duration"><br>
-  Difficulty: 
-  <select name="difficulty">
-    <option value="easy">Easy</option>
-    <option value="medium">Medium</option>
-    <option value="hard">Hard</option>
-  </select><br>
-  Number of Questions: <input type="number" name="num_questions"><br>
-  <button type="submit">Create</button>
+<h1>Create Challenge</h1>
+<form action="/create_challenge" method="POST">
+    Challenge Name: <input type="text" name="challenge_name" required><br>
+    Number of Questions: <input type="number" name="num_questions" min="1" required><br>
+    Difficulty: 
+    <select name="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+    </select><br>
+    <button type="submit">Create Challenge</button>
 </form>
 </body>
 </html>
