@@ -1,5 +1,7 @@
 flask
-pillow
-pdf2image
-mysql-connector-python
+psycopg2-binary
+python-dotenv
+flask-cors
 gunicorn
+pdf2image
+pillow
