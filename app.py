@@ -24,6 +24,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Admin credentials (simple)
 ADMINS = {'admin': 'password123'}
+ADMIN_USER = os.getenv("ADMIN_USER", "admin")
+ADMIN_PASS = os.getenv("ADMIN_PASS", "password123")
 
 # Connect to Supabase DB
 def get_conn():
@@ -85,19 +87,18 @@ def leaderboard():
 # ------------------- ADMIN -------------------
 
 @app.route('/admin', methods=['GET', 'POST'])
-def admin():
+def admin_login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-        # simple check - you can improve later
-        if username == os.getenv("ADMIN_USER") and password == os.getenv("ADMIN_PASS"):
+        if username == ADMIN_USER and password == ADMIN_PASS:
             return redirect('/upload_pdf')
         else:
             return "Invalid credentials", 401
 
     return render_template('admin.html')
-
+    
 @app.route("/submit_score", methods=["POST"])
 def submit_score():
     data = request.get_json()
