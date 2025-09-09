@@ -1,7 +1,0 @@
-flask
-psycopg2-binary
-python-dotenv
-flask-cors
-gunicorn
-pdf2image
-pillow
