@@ -49,32 +49,24 @@ def practice():
 def create_challenge():
     if request.method == 'POST':
         challenge_name = request.form['challenge_name']
-        duration = int(request.form['duration'])
-        difficulty = request.form['difficulty']
         num_questions = int(request.form['num_questions'])
-        
+        difficulty = request.form['difficulty']
+
         conn = get_conn()
         cur = conn.cursor()
-        
-        if difficulty == 'medium':
-            # 60% easy, 40% hard
-            easy_count = int(num_questions * 0.6)
-            hard_count = num_questions - easy_count
-            cur.execute(f"SELECT * FROM questions WHERE difficulty='easy' ORDER BY RANDOM() LIMIT {easy_count}")
-            easy_qs = cur.fetchall()
-            cur.execute(f"SELECT * FROM questions WHERE difficulty='hard' ORDER BY RANDOM() LIMIT {hard_count}")
-            hard_qs = cur.fetchall()
-            questions = easy_qs + hard_qs
-        else:
-            cur.execute(f"SELECT * FROM questions WHERE difficulty=%s ORDER BY RANDOM() LIMIT %s", (difficulty, num_questions))
-            questions = cur.fetchall()
-        
+
+        cur.execute(
+            "INSERT INTO challenges (name, num_questions, difficulty) VALUES (%s, %s, %s) RETURNING id",
+            (challenge_name, num_questions, difficulty)
+        )
+        challenge_id = cur.fetchone()[0]
+        conn.commit()
         cur.close()
         conn.close()
-        
-        return render_template('createChallenge.html', questions=questions, challenge_name=challenge_name, duration=duration)
-    
-    return render_template('createChallenge.html')
+
+        return redirect(f'/join_challenge/{challenge_id}')  # redirect after create
+
+    return render_template('create_challenge.html')
 
 @app.route('/join_challenge')
 def join_challenge():
