@@ -112,37 +112,39 @@ def submit_score():
 
     return jsonify({"message": "Score saved!"}), 200
 
-@app.route("/upload_pdf", methods=["POST"])
+@app.route("/upload_pdf", methods=["GET", "POST"])
 def upload_pdf():
-    try:
-        file = request.files["file"]
-        if not file:
-            return jsonify({"error": "No file uploaded"}), 400
+    if request.method == "POST":
+        try:
+            file = request.files["pdf_file"]
+            if not file:
+                return "No file uploaded", 400
 
-        # Read file into memory
-        pdf_bytes = file.read()
+            pdf_bytes = file.read()
+            doc = fitz.open(stream=pdf_bytes, filetype="pdf")
 
-        import fitz  # PyMuPDF
-        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+            text = ""
+            for page in doc:
+                text += page.get_text()
 
-        text = ""
-        for page in doc:
-            text += page.get_text()
+            conn = get_conn()
+            cur = conn.cursor()
+            cur.execute("INSERT INTO uploads (content, difficulty) VALUES (%s, %s)", 
+                        (text, request.form.get("difficulty", "easy")))
+            conn.commit()
+            cur.close()
+            conn.close()
 
-        # Store in DB
-        conn = get_conn()
-        cur = conn.cursor()
-        cur.execute("INSERT INTO uploads (content) VALUES (%s)", (text,))
-        conn.commit()
-        cur.close()
-        conn.close()
+            flash("PDF uploaded successfully!", "success")
+            return redirect("/upload_pdf")
 
-        return jsonify({"message": "PDF uploaded and processed successfully!"})
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return f"Error: {e}", 500
 
-    except Exception as e:
-        import traceback
-        traceback.print_exc()  # prints full error in Render logs
-        return jsonify({"error": str(e)}), 500
+    # GET → show the form
+    return render_template("upload_pdf.html")
 
 # ------------------- RUN -------------------
 
