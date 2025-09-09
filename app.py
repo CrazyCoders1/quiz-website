@@ -87,7 +87,7 @@ def leaderboard():
 # ------------------- ADMIN -------------------
 
 @app.route('/admin', methods=['GET', 'POST'])
-def admin_login():
+def admin():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
